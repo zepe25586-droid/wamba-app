@@ -1,0 +1,57 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      // In a real app, you would have a more secure way to check for admin,
+      // such as custom claims or a dedicated 'admins' collection.
+      // For this example, we'll hardcode the admin's email.
+      return isSignedIn() && request.auth.token.email == 'momojulinio1@gmail.com';
+    }
+
+    // Members can be read by any signed-in user.
+    // Creation happens during sign-up.
+    // Updates can only be done by the member themselves (for their profile) or an admin.
+    // Deletion is admin-only.
+    match /members/{memberId} {
+      allow read: if isSignedIn();
+      allow create: if true; // Allows signup
+      allow update: if isAdmin() || isOwner(memberId);
+      allow delete: if isAdmin();
+    }
+    
+    // Only authenticated users can access the chat
+    match /messages/{messageId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // Projets can be read by all signed-in users.
+    // Projets can only be created, updated, or deleted by an admin.
+    match /projets/{projetId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+    
+    // Archives can be read by all signed-in users.
+    // Archives can only be created, updated, or deleted by an admin.
+    match /archives/{archiveId} {
+        allow read: if isSignedIn();
+        allow write: if isAdmin();
+    }
+
+    // All other collections are admin-only for all operations.
+    match /{collection}/{docId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

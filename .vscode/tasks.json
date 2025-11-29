@@ -1,0 +1,248 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "install-dependencies",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "build-next",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "dev:local",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev:local"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "build-next (after fix)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "install-deps (again)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "install-deps-powershell",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"npm install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "build-next (final)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "dev:local (start)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev:local"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "typecheck",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"typecheck"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "typecheck",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"typecheck"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "typecheck-npx",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"tsc",
+				"--noEmit"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "typecheck-final",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"typecheck"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "build-next-verify",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "typecheck-final-2",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"tsc",
+				"--noEmit"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "local-tsc",
+			"type": "shell",
+			"command": "./node_modules/.bin/tsc",
+			"args": [
+				"--noEmit"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "local-tsc-pwsh",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"./node_modules/.bin/tsc --noEmit"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "typecheck-final-2",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"tsc",
+				"--noEmit"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "typecheck-npx",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"tsc",
+				"--noEmit"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "check-space-and-sizes",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Get-PSDrive -PSProvider FileSystem | Select-Object Name,@{Name='FreeGB';Expression={\"{0:N2}\" -f ($_.Free/1GB)}},@{Name='UsedGB';Expression={\"{0:N2}\" -f ($_.Used/1GB)}}; $s=(Get-ChildItem -Path .\\node_modules -Recurse -ErrorAction SilentlyContinue | Where-Object {-not $_.PSIsContainer} | Measure-Object -Property Length -Sum).Sum; Write-Output \\\"node_modules size (GB): $('{0:N2}' -f ($s/1GB))\\\"; $t=(Get-ChildItem -Path .\\.next -Recurse -ErrorAction SilentlyContinue | Where-Object {-not $_.PSIsContainer} | Measure-Object -Property Length -Sum).Sum; Write-Output \\\"_.next size (GB): $('{0:N2}' -f ($t/1GB))\\\""
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "disk-free",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Get-PSDrive -PSProvider FileSystem | Select-Object Name,@{Name='FreeGB';Expression={\"{0:N2}\" -f ($_.Free/1GB)}},@{Name='UsedGB';Expression={\"{0:N2}\" -f (($_.Used ?? 0)/1GB)}} | Format-Table -AutoSize"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

@@ -1,0 +1,234 @@
+
+{
+  "entities": {
+    "Member": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Member",
+      "type": "object",
+      "description": "Represents a member of the Tontine.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the member entity, matches Firebase Auth UID."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the member."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the member.",
+          "format": "email"
+        },
+        "phoneNumber": {
+            "type": "string",
+            "description": "The phone number of the member."
+        },
+        "joinDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date the member joined."
+        },
+        "avatarUrl": {
+            "type": "string",
+            "description": "URL for the member's profile picture."
+        },
+        "badges": {
+            "type": "array",
+            "description": "Badges awarded to the member.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "color": { "type": "string", "enum": ["gold", "silver", "bronze", "default"]}
+                }
+            }
+        },
+        "status": {
+            "type": "string",
+            "enum": ["approved", "pending", "rejected"],
+            "description": "The approval status of the member."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "phoneNumber",
+        "joinDate",
+        "avatarUrl",
+        "status"
+      ]
+    },
+    "Projet": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Projet",
+      "type": "object",
+      "description": "Represents a projet or contribution made by a member.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the projet entity."
+        },
+        "memberId": {
+          "type": "string",
+          "description": "Reference to Member ID."
+        },
+        "date": {
+          "type": "string",
+          "description": "The date of the contribution.",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "description": "The amount of the contribution."
+        },
+        "status": {
+            "type": "string",
+            "enum": ["Payé", "En attente"]
+        }
+      },
+      "required": [
+        "memberId",
+        "date",
+        "amount",
+        "status"
+      ]
+    },
+    "Report": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Report",
+      "type": "object",
+      "description": "Represents a report on Tontine activities.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the report entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the report."
+        },
+        "category": {
+            "type": "string",
+            "description": "The category or folder for the report."
+        },
+        "date": {
+          "type": "string",
+          "description": "The date the report was generated.",
+          "format": "date-time"
+        },
+        "content": {
+          "type": "string",
+          "description": "The content of the report."
+        }
+      },
+      "required": [
+        "name",
+        "category",
+        "date",
+        "content"
+      ]
+    },
+    "Beneficiary": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "Beneficiary",
+        "type": "object",
+        "description": "Represents a member who has received funds.",
+        "properties": {
+            "id": { "type": "string" },
+            "memberId": { "type": "string" },
+            "date": { "type": "string", "format": "date-time"},
+            "amount": { "type": "number" }
+        },
+        "required": ["memberId", "date", "amount"]
+    },
+    "Pret": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "Pret",
+        "type": "object",
+        "description": "Represents a loan given to a member.",
+        "properties": {
+            "id": { "type": "string" },
+            "memberId": { "type": "string" },
+            "date": { "type": "string", "format": "date-time"},
+            "amount": { "type": "number" },
+            "status": { "type": "string", "enum": ["En cours", "Remboursé"]}
+        },
+        "required": ["memberId", "date", "amount", "status"]
+    },
+    "Message": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "Message",
+        "type": "object",
+        "description": "A message in the group chat.",
+        "properties": {
+            "id": { "type": "string" },
+            "senderId": { "type": "string" },
+            "text": { "type": "string" },
+            "file": { 
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"},
+                    "url": {"type": "string"},
+                    "type": {"type": "string"}
+                }
+            },
+            "timestamp": { "type": "string", "format": "date-time"}
+        },
+        "required": ["senderId", "timestamp"]
+    },
+    "Archive": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "Archive",
+        "type": "object",
+        "description": "An archive of old projets.",
+        "properties": {
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "dateCreated": { "type": "string", "format": "date-time"},
+            "projetIds": {
+                "type": "array",
+                "items": { "type": "string"}
+            }
+        },
+        "required": ["name", "dateCreated", "projetIds"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password"
+    ]
+  },
+  "local-data": {
+    "/members/{memberId}": {
+      "schema": { "$ref": "#/entities/Member" },
+      "description": "Stores member information (local datastore)."
+    },
+    "/projets/{projetId}": {
+      "schema": { "$ref": "#/entities/Projet" },
+      "description": "Stores projet/contribution records (local datastore)."
+    },
+    "/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/Report" },
+      "description": "Stores generated reports (local datastore)."
+    },
+    "/beneficiaries/{beneficiaryId}": {
+      "schema": { "$ref": "#/entities/Beneficiary" },
+      "description": "Stores records of members who have received funds (local datastore)."
+    },
+    "/prets/{pretId}": {
+      "schema": { "$ref": "#/entities/Pret" },
+      "description": "Stores loan records (local datastore)."
+    },
+    "/messages/{messageId}": {
+        "schema": { "$ref": "#/entities/Message" },
+        "description": "Stores chat messages for the group chat."
+    },
+    "/archives/{archiveId}": {
+        "schema": { "$ref": "#/entities/Archive" },
+        "description": "Stores archives of old projets."
+    }
+  }
+}
