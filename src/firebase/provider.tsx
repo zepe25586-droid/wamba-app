@@ -6,9 +6,12 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { ThemeProvider } from 'next-themes';
 
 import { FirebaseProvider } from '@/firebase/provider';
-import { firebaseApp, firestore, auth } from '@/firebase'; // <-- IMPORT NECESSAIRE
+import { initializeFirebase } from '@/firebase'; // <-- le bon import
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  // Initialise Firebase correctement
+  const { firebaseApp, auth, firestore, storage } = initializeFirebase();
+
   return (
     <ThemeProvider
       attribute="class"
@@ -19,8 +22,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <TooltipProvider>
         <FirebaseProvider
           firebaseApp={firebaseApp}
-          firestore={firestore}
           auth={auth}
+          firestore={firestore}
+          storage={storage}
         >
           <AuthProvider>
             {children}
