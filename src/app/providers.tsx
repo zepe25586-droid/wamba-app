@@ -1,10 +1,10 @@
-
 'use client';
 
 import { AuthProvider } from '@/context/auth-context';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ThemeProvider } from 'next-themes';
+import { FirebaseProvider } from '@/firebase/provider';   // ← IMPORTANT
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -15,10 +15,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <TooltipProvider>
-        <AuthProvider>
-          {children}
-          <Toaster />
-        </AuthProvider>
+        <FirebaseProvider>        {/* ← AJOUT OBLIGATOIRE */}
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </FirebaseProvider>
       </TooltipProvider>
     </ThemeProvider>
   );
