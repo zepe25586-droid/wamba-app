@@ -37,6 +37,8 @@ export function getSdks(firebaseApp: FirebaseApp) {
     try {
       const authEmulatorHost =
         process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST || 'localhost:9099';
+
+      // ✔ FIXED TEMPLATE STRING
       connectAuthEmulator(auth, http://${authEmulatorHost});
 
       const storageHost =
@@ -44,7 +46,9 @@ export function getSdks(firebaseApp: FirebaseApp) {
       const storagePort = Number(
         process.env.NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_PORT || '9199'
       );
+
       connectStorageEmulator(storage, storageHost, storagePort);
+
     } catch (e) {
       if (process.env.NODE_ENV === 'development') {
         console.warn('Failed connecting to Firebase emulators', e);
